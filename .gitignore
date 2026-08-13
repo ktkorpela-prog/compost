@@ -1,0 +1,9 @@
+__pycache__/
+.pytest_cache/
+*.pyc
+.venv/
+results*.csv
+# Corpora may contain licensed/copyrighted material; don't commit them by accident.
+corpora/pre_ai_human/*.txt
+corpora/contemporary_human/*.txt
+corpora/ai_assisted/*.txt
