@@ -4,16 +4,29 @@ Notable changes to Compost. Format: [Keep a Changelog](https://keepachangelog.co
 
 ## [Unreleased]
 
-Nothing on `main` beyond `0.1.0` at time of writing.
+### Fixed
 
-### Planned — not yet merged
+- Structural frames are detected across adjacent sentences. A reframe written across a full stop — `The real question isn't whether AI will replace us. It's what happens when it does.` — was invisible to the extractor while the same construction written with a comma was counted. That asymmetry suppressed the signal precisely where the hypothesis expects it, and the test suite stayed green because every structural test used a single-sentence form.
 
-The following exists only on the local branch `fix/adjacent-sentence-structural-frames` (commit `d19c9d1`). **It is not part of `main` and has not been published.** It is recorded here so the decisions are not lost, and moves to a released section only when merged.
+### Changed
 
-- **Fix:** structural frames detected across adjacent sentences. A reframe written across a full stop was invisible while the comma form was counted, suppressing the signal where the hypothesis expects it.
-- **Change:** structural extraction runs over each sentence and each directly adjacent sentence pair, confined to one paragraph; overlapping matches of the same frame collapse to one occurrence.
-- **Change:** sentences segmented per paragraph rather than per document. The segmentation rule is unchanged, only its scope. Affects sentence counts only for segments lacking terminal punctuation.
-- **Removed:** structural frame `whether <X> or <Y>` — ordinary English subordination rather than a rhetorical construction.
+- Structural extraction runs over two unit families, both confined to one paragraph: each individual sentence, and each pair of directly adjacent sentences. Non-adjacent sentences are never combined, and a paragraph break ends adjacency.
+- Overlapping matches of the same frame collapse to a single occurrence, resolved in absolute paragraph coordinates. Deliberately conservative: distinct overlapping instances of one frame count once.
+- Sentences are segmented per paragraph rather than per document. The segmentation rule is unchanged — only its scope. This can only raise sentence counts, and only for segments lacking terminal punctuation such as headings and list fragments; continuous prose is unaffected.
+- Lexical n-gram extraction is unchanged and still never crosses a sentence boundary.
+- Sentence count remains the prevalence denominator. A frame spanning two adjacent sentences contributes one occurrence against a denominator counting both.
+
+### Removed
+
+- Structural frame `whether <X> or <Y>`. It matches ordinary English subordination — indirect questions, disjunctive complements, plain conditionals — rather than a rhetorical construction, so it would appear at similar rates in every corpus and rank on lift only through sampling variation. Recorded in `WITHDRAWN_STRUCTURAL_RULES`; not replaced by a curated phrase list.
+
+### Added
+
+- Eight regression tests: cross-sentence detection, single-sentence detection, the non-adjacent boundary, de-duplication across overlapping extraction paths, denominator integrity, the paragraph boundary, frame withdrawal, and n-gram containment.
+
+### Known limitations
+
+- Structural frames now get `2n−1` extraction opportunities per `n` sentences where n-grams get `n`, against a shared sentence denominator. Within-kind comparison is unaffected, but the ranked CSV structurally favours frames over n-grams and should not be read as a single leaderboard.
 
 ## [0.1.0] — 2026-08-13
 
@@ -32,6 +45,6 @@ Initial public scaffold (`e7ec0fa`). A signal-validation experiment, not a shipp
 
 Carried forward because they constrain how results may be read:
 
-- The ranked CSV mixes n-gram and structural rows against a shared sentence denominator despite different exposure bases. Within-kind comparison is unaffected; cross-kind ranking is not meaningful.
+- The ranked CSV mixes n-gram and structural rows in one ordering despite their being different classes of pattern; cross-kind ranking is not meaningful.
 - Sentence segmentation is regex-based and unbenchmarked.
 - `paragraphs()` splits on blank lines, which dataset-derived corpora may not carry.
