@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Iterable
 
-from .extractor import Pattern, extract_patterns
+from .extractor import Pattern, extract_segment_patterns
 from .normalizer import paragraphs, sentences, tokens
 
 
@@ -36,18 +36,30 @@ class CorpusStats:
 
 
 def scan_texts(name: str, texts: Iterable[str]) -> CorpusStats:
+    """Scan documents paragraph by paragraph.
+
+    Sentences are segmented within each paragraph rather than across the whole
+    document. Adjacency for cross-sentence structural frames is therefore
+    confined to a paragraph: the last sentence of one paragraph is never
+    treated as adjacent to the first sentence of the next.
+
+    The segmentation rule itself is unchanged. Sentence count remains the
+    denominator for sentence prevalence, and a structural frame spanning two
+    adjacent sentences still contributes one occurrence against a denominator
+    that counts both sentences.
+    """
     stats = CorpusStats(name=name)
     for text in texts:
         stats.documents += 1
         ps = paragraphs(text)
-        ss = sentences(text)
         stats.paragraphs += len(ps)
-        stats.sentences += len(ss)
         stats.tokens += len(tokens(text))
 
         seen_in_document: set[Pattern] = set()
-        for sentence in ss:
-            extracted = extract_patterns(sentence)
+        for paragraph in ps:
+            ss = sentences(paragraph)
+            stats.sentences += len(ss)
+            extracted = extract_segment_patterns(ss)
             stats.occurrences.update(extracted)
             seen_in_document.update(extracted.keys())
 

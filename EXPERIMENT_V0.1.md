@@ -53,6 +53,27 @@ No LLM is asked whether a sentence "sounds like AI". That would contaminate the 
 
 The structural catalogue is intentionally small in v0.1. If the signal exists, later versions can test automatic frame induction and clustering.
 
+### Extraction scope
+
+N-grams are extracted within a single sentence and never cross a sentence boundary.
+
+Structural frames are extracted over two unit families, both confined to a single paragraph:
+
+1. each individual sentence;
+2. each pair of directly adjacent sentences.
+
+Non-adjacent sentences are never combined, and the last sentence of a paragraph is not adjacent to the first sentence of the next. Without adjacent pairs, a reframe written across a full stop — `The real question isn't whether AI will replace us. It's what happens when it does.` — is invisible to the extractor, while the same construction written with a comma is counted. That asymmetry would suppress the signal precisely where the hypothesis expects it.
+
+A frame visible inside one sentence is also visible inside the adjacent pair containing that sentence. Matches are therefore resolved to absolute paragraph coordinates and overlapping matches of the same frame collapse to a single occurrence.
+
+Sentence count remains the denominator. A frame spanning two adjacent sentences contributes one occurrence against a denominator that counts both sentences.
+
+### Withdrawn frames
+
+`whether <X> or <Y>` was withdrawn before the first validation run. It matches ordinary English subordination — indirect questions, disjunctive complements, plain conditionals — rather than a rhetorical construction. Its prevalence would be dominated by grammar, appear at similar rates in every corpus, and rank on lift only through sampling variation.
+
+It has not been replaced by a hand-curated phrase list. A withdrawn frame is readmitted only if it can be constrained to a genuinely rhetorical shape.
+
 ## Metrics
 
 For each pattern `p` in corpus `c`:
