@@ -38,6 +38,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import json
 import sys
 import time
 import urllib.request
@@ -76,12 +77,42 @@ def download(url: str, dest: Path, chunk: int = 1 << 20) -> None:
     tmp.replace(dest)
 
 
-def sha256_prefix(path: Path, nbytes: int = 1 << 24) -> str:
-    """Hash the first 16 MB. Enough to detect a changed upstream file cheaply."""
+HF_TREE = {
+    "raid_train.csv": ("liamdugan/raid", "train.csv"),
+    "raid_extra.csv": ("liamdugan/raid", "extra.csv"),
+    "hc3_open_qa.jsonl": ("Hello-SimpleAI/HC3", "open_qa.jsonl"),
+    "hc3_wiki_csai.jsonl": ("Hello-SimpleAI/HC3", "wiki_csai.jsonl"),
+    "hc3_medicine.jsonl": ("Hello-SimpleAI/HC3", "medicine.jsonl"),
+    "hc3_finance.jsonl": ("Hello-SimpleAI/HC3", "finance.jsonl"),
+}
+
+
+def upstream_hashes(repo: str) -> dict[str, tuple[str | None, int | None]]:
+    """Published SHA-256 (LFS oid) and size for each file in a HuggingFace dataset."""
+    url = f"https://huggingface.co/api/datasets/{repo}/tree/main?recursive=1"
+    req = urllib.request.Request(url, headers={"User-Agent": "compost-experiment-01"})
+    try:
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            tree = json.load(resp)
+    except Exception as exc:  # network failure must not mask a good download
+        print(f"  ! could not fetch upstream hashes for {repo}: {exc}")
+        return {}
+    out: dict[str, tuple[str | None, int | None]] = {}
+    for entry in tree:
+        if entry.get("type") != "file":
+            continue
+        lfs = entry.get("lfs") or {}
+        out[entry["path"]] = (lfs.get("oid"), lfs.get("size") or entry.get("size"))
+    return out
+
+
+def sha256_full(path: Path, chunk: int = 1 << 22) -> str:
+    """Full-file SHA-256, so integrity is checked past the first megabytes."""
     h = hashlib.sha256()
     with path.open("rb") as fh:
-        h.update(fh.read(nbytes))
-    return h.hexdigest()[:16]
+        while block := fh.read(chunk):
+            h.update(block)
+    return h.hexdigest()
 
 
 def main() -> None:
@@ -99,10 +130,31 @@ def main() -> None:
     for domain in HC3_DOMAINS:
         download(f"{HC3_BASE}/{domain}.jsonl", RAW / f"hc3_{domain}.jsonl")
 
-    print("\nProvenance:")
+    print("\nProvenance (full-file SHA-256 verified against upstream where published):")
+    cache: dict[str, dict] = {}
     for path in sorted(RAW.glob("*")):
-        if path.is_file() and not path.name.endswith(".part"):
-            print(f"  {path.name:<26} {path.stat().st_size:>14,} bytes  sha256[:16MB]={sha256_prefix(path)}")
+        if not path.is_file() or path.name.endswith(".part"):
+            continue
+        repo_file = HF_TREE.get(path.name)
+        expected_oid = expected_size = None
+        if repo_file:
+            repo, remote = repo_file
+            if repo not in cache:
+                cache[repo] = upstream_hashes(repo)
+            expected_oid, expected_size = cache[repo].get(remote, (None, None))
+
+        size = path.stat().st_size
+        digest = sha256_full(path)
+        if expected_oid:
+            ok = digest == expected_oid and size == expected_size
+            verdict = "VERIFIED" if ok else "MISMATCH"
+        else:
+            verdict = "unverified (no upstream hash published)"
+        print(f"  {path.name:<26} {size:>14,} bytes")
+        print(f"    {'sha256':<10} {digest}")
+        if expected_oid:
+            print(f"    {'upstream':<10} {expected_oid}")
+        print(f"    {'status':<10} {verdict}")
 
 
 if __name__ == "__main__":

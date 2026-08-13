@@ -198,15 +198,33 @@ def main() -> None:
           f"{len(explor)} lexical candidates  [POST-HOC]")
     print(f"  structural: {len(structural)} frames, reported exhaustively (no threshold)\n")
 
+    # Provenance columns. A one-row-per-candidate CSV cannot represent an empty
+    # pre-registered set, and fabricating a placeholder row would invent a result
+    # that does not exist. is_primary_result therefore reads False on every row
+    # whenever the pre-registered pass nominated nothing; see
+    # experiment_01_patterns.NOTES.md.
+    labels = {"preregistered": "preregistered_primary",
+              "exploratory": "post_hoc_exploratory",
+              "structural_exhaustive": "structural_exhaustive_descriptive"}
+    floors = {"preregistered": str(PREREGISTERED_MIN_DOC_PREVALENCE),
+              "exploratory": str(EXPLORATORY_MIN_DOC_PREVALENCE),
+              "structural_exhaustive": "none"}
+
+    def annotate(row: dict, candidate_set: str) -> dict:
+        row["candidate_set"] = candidate_set
+        row["is_primary_result"] = str(candidate_set == "preregistered")
+        row["analysis_label"] = labels[candidate_set]
+        row["nomination_floor"] = floors[candidate_set]
+        row["preregistered_floor"] = str(PREREGISTERED_MIN_DOC_PREVALENCE)
+        row["preregistered_candidate_count"] = str(len(prereg))
+        return row
+
     rows: list[dict] = []
     for pattern in explor:
-        row = evaluate(pattern, stats)
-        row["candidate_set"] = "preregistered" if pattern.text in prereg_set else "exploratory"
-        rows.append(row)
+        kind = "preregistered" if pattern.text in prereg_set else "exploratory"
+        rows.append(annotate(evaluate(pattern, stats), kind))
     for pattern in structural:
-        row = evaluate(pattern, stats)
-        row["candidate_set"] = "structural_exhaustive"
-        rows.append(row)
+        rows.append(annotate(evaluate(pattern, stats), "structural_exhaustive"))
 
     rows.sort(key=lambda r: (r["candidate_set"],
                              -float(r.get("lift_validation_vs_human", 0)),
