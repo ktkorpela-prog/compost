@@ -23,6 +23,12 @@ Notable changes to Compost. Format: [Keep a Changelog](https://keepachangelog.co
 ### Added
 
 - Eight regression tests: cross-sentence detection, single-sentence detection, the non-adjacent boundary, de-duplication across overlapping extraction paths, denominator integrity, the paragraph boundary, frame withdrawal, and n-gram containment.
+- **Experiment 01 — first signal-validation experiment, completed.** Tests whether mechanically extracted patterns recur at elevated rates across independent AI samples while remaining less prevalent in comparable human writing. Discovery and validation partitions use disjoint instruction-tuned models, so replication means surviving a change of AI system rather than a change of topic.
+  - **The pre-registered analysis nominated zero candidates.** Its ≥25% document-prevalence floor was unreachable: the most widespread pattern across 360 AI documents is `such as` at 19.4%. That null is the primary result.
+  - A post-hoc exploratory pass at a ≥5% floor showed **limited recurrence** — 10 of 107 candidates recurred across models, 7 also elevated in an independently collected corpus. Survivors are dominated by genre vocabulary rather than rhetorical style. No structural frame replicated.
+  - **Recommendation: `ITERATE`.** The signal is real but too contaminated by genre, and the structural catalogue too sparse, to justify building a Language Commons.
+  - Methodological limitations — pooled human baseline, genre contamination, structural denominator bias, incomplete source matching — are documented in `RESULTS_EXPERIMENT_01.md`.
+  - Adds `scripts/fetch_corpus.py`, `scripts/build_corpus.py`, `scripts/run_experiment_01.py`, `experiment_01_patterns.csv` and `experiment_01_patterns.NOTES.md`. No MCP server, API, dashboard or product layer. Raw corpus text is git-ignored by directory and never committed.
 
 ### Known limitations
 
