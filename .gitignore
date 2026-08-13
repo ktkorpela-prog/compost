@@ -1,9 +1,46 @@
+# Secrets / local environment
+.env
+.env.*
+!.env.example
+
+# Python
 __pycache__/
-.pytest_cache/
-*.pyc
+*.py[cod]
 .venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+.ipynb_checkpoints/
+
+# Raw corpus material
+#
+# Code and metadata may be public; downloaded or licensed corpus text stays
+# local by default. Excluded by directory rather than by extension, so a new
+# dataset format (.jsonl, .parquet, .arrow, ...) is ignored on arrival instead
+# of needing a rule written after the fact.
+#
+# Directories are re-included so structure-documenting files survive. This
+# block is scoped to corpora/ only: test fixtures under tests/ are deliberately
+# untouched and remain trackable.
+corpora/**
+!corpora/**/
+!corpora/**/README.md
+!corpora/**/.gitkeep
+!corpora/**/metadata.csv
+
+# Generated experiment output
+#
+# Deliberately extension-qualified. core.ignorecase is true on Windows, so a
+# bare `results*` glob would also swallow a published report named
+# RESULTS_EXPERIMENT_01.md. Published reports must stay trackable.
 results*.csv
-# Corpora may contain licensed/copyrighted material; don't commit them by accident.
-corpora/pre_ai_human/*.txt
-corpora/contemporary_human/*.txt
-corpora/ai_assisted/*.txt
+/out/
+/output/
