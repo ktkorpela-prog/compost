@@ -227,18 +227,26 @@ into is it its me my not of on or our ours she so that the their theirs them the
 this to us was we were what when where which who why will with you your
 ```
 
-**Extensions — project-defined, and NOT YET FROZEN.**
+**Extensions — project-defined, FROZEN for Experiment 02.**
 
-These terms were authored during the drafting of this specification. They derive from no
-external lexicon, no published word list and no upstream standard, and they carry no
-authority beyond this project's own judgement. **They must be reviewed and explicitly
-frozen before implementation** (§11 step 1); until then this block is a proposal, not a
-frozen decision.
+Provenance of the complete set:
 
-Anchors are **not tuned to Experiment 01 findings**. Notably `such` is absent, so
-Experiment 01's most prevalent lexical pattern `such as` skeletonises to `<X> as`. That is
-left standing deliberately: selecting anchors to make a prior result representable would
-make the anchor set a function of the answer it is used to compute.
+- **59 terms inherited** from the Experiment 01 implementation (`FUNCTION_WORDS` on `main`).
+- **58 terms project-defined** during Experiment 02 design, authored for this
+  specification.
+- **Not claimed to be a canonical linguistic or function-word inventory.** These terms
+  derive from no external lexicon, no published word list and no upstream standard. They
+  carry no authority beyond this project's own judgement and should not be cited as a
+  general-purpose function-word set.
+- **Not tuned to Experiment 01 findings.** Notably `such` is absent, so Experiment 01's
+  most prevalent lexical pattern `such as` skeletonises to `<X> as`. That is left standing
+  deliberately: selecting anchors to make a prior result representable would make the
+  anchor set a function of the answer it is used to compute.
+- **Any future change requires a new anchor-set version.** `structural_anchors_v1` is
+  closed. Adding, removing or substituting a term produces `v2`, with its own SHA-256, and
+  invalidates comparison against any result computed under `v1`.
+
+**Total: 117 anchors** (59 inherited + 58 project-defined, no overlap).
 
 ```
 modals/auxiliaries : do does did can could shall should would may might must
@@ -255,9 +263,13 @@ does **not** appear in the inherited set; it is an extension term.
 
 The twelve negative contractions listed above are **redundant under rule 4**, which
 canonicalises them to `is not`, `do not` and so on before the anchor lookup runs — both
-resulting tokens are already inherited anchors. They are retained as a safety net for any
-surface form the canonicaliser fails to match, and are flagged for the pre-implementation
-review.
+resulting tokens are already inherited anchors. They are **retained in v1 as defensive
+anchors**: should the canonicaliser fail to match a surface form, the contraction survives
+as an anchor rather than collapsing to `<X>` and silently destroying the frame. This is a
+frozen decision for v1, not an open question.
+
+`can't` canonicalises to `can not`, two tokens, rather than to the single token `cannot`.
+`cannot` is not an anchor and would map to `<X>`, destroying the frame it appears in.
 
 ## 4. Prompt-echo control
 
@@ -473,10 +485,10 @@ regex sentence segmentation, which now carries more weight because *P* depends o
 
 Steps run in this order. Later steps do not inform earlier ones.
 
-1. **Freeze artifacts.** Review the project-defined extension terms (§3.4) and freeze them
-   explicitly; they are a proposal until this step completes. Commit
-   `compost/lexicon/structural_anchors_v1.txt`; record its SHA-256. Commit synthetic
-   fixtures with expected skeletons and counts.
+1. **Freeze artifacts.** Transcribe the 117 frozen anchors (§3.4) into
+   `compost/lexicon/structural_anchors_v1.txt` and record its SHA-256. The anchor set is
+   already frozen; this step commits it, it does not reopen it. Commit synthetic fixtures
+   with expected skeletons and counts.
 2. **Verify integrity.** Confirm `train.csv` full SHA-256 against upstream. Confirm §9
    coverage figures still hold.
 3. **Validate inducer.** Run against synthetic fixtures. Must recover the four `main`
