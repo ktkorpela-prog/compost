@@ -140,8 +140,29 @@ the judgement being measured.
 1. Unicode NFKC.
 2. Apostrophe folding (`’` `‘` → `'`).
 3. Lowercase.
-4. **Contractions preserved as single tokens.** `isn't` is never expanded to `is not` —
-   expansion would destroy the exact frames under study.
+4. **Contraction handling — differs by pattern class.**
+
+   **Structural skeletonisation only:** mechanically unambiguous negative contractions are
+   canonicalised to their expanded form, so that equivalent frames do not split into two
+   skeletons and halve their own evidence:
+
+   ```
+   isn't → is not        aren't → are not      wasn't → was not
+   weren't → were not    don't → do not        doesn't → does not
+   didn't → did not      won't → will not      can't → can not
+   couldn't → could not  shouldn't → should not  wouldn't → would not
+   ```
+
+   Each expansion is deterministic and has exactly one reading, so no interpretation is
+   introduced. Without this, `The real question isn't X` and `The real question is not X`
+   would induce distinct skeletons for one construction.
+
+   **Ambiguous contractions are left unresolved** and remain single tokens: `it's`,
+   `that's`, `there's`, `here's` are each ambiguous between *is* and *has*, and resolving
+   them would require a judgement this pipeline deliberately refuses to make.
+
+   **Lexical extraction is unchanged.** N-gram extraction sees the original surface forms;
+   no canonicalisation is applied to it.
 5. Numerals → `<NUM>`. This prevents `1 cup` and `ingredients 1` recipe artifacts from
    re-entering as skeletons.
 6. Any token not in the frozen lexicon (§3.4) and not `<NUM>` → `<X>`.
@@ -166,6 +187,15 @@ fixture set must include:
 
 - `not <X> but <Y>` within a single sentence and across a sentence boundary;
 - `isn't <X> it's <Y>` in both period and comma forms;
+- **contracted vs expanded equivalence**: each canonicalised negative contraction
+  (rule 4) paired with its expanded form — `isn't`/`is not`, `don't`/`do not`,
+  `won't`/`will not` and the rest — asserting that both surface forms induce the
+  **identical skeleton** and that their occurrences aggregate rather than split;
+- **ambiguous-contraction non-equivalence**: `it's`/`it is` and `that's`/`that has`
+  asserting that these are *not* unified, confirming canonicalisation stops where
+  ambiguity begins;
+- **lexical non-interference**: the same fixtures asserting that n-gram extraction still
+  sees original surface forms, so canonicalisation has not leaked out of skeletonisation;
 - negative controls that must induce nothing;
 - length variants exercising slot collapse (rule 7);
 - numeral cases exercising `<NUM>` (rule 5).
@@ -177,15 +207,19 @@ HC3 is **not** a correctness oracle. Nobody knows HC3's true frame inventory, so
 agreement there would prove nothing and disagreement would be uninterpretable. HC3 tests
 only that the pipeline runs end to end at scale.
 
-### 3.4 Frozen function-word lexicon
+### 3.4 Structural anchor set
 
-Committed as `compost/lexicon/function_words_v1.txt` before any Experiment 02 run. **Its
-SHA-256 is recorded in every result artifact.** Any change constitutes a new lexicon
-version and invalidates cross-experiment comparison — enforced by the recorded hash, not
-by convention.
+Committed as `compost/lexicon/structural_anchors_v1.txt` before any Experiment 02 run.
+**Its SHA-256 is recorded in every result artifact.** Any change constitutes a new version
+and invalidates cross-experiment comparison — enforced by the recorded hash, not by
+convention.
 
-**Base set** — the 58 entries already in `FUNCTION_WORDS` on `main`, retained unchanged
-for continuity with Experiment 01:
+The name is deliberate. This set defines which tokens survive as *anchors* under
+skeletonisation (rule 6). It is not a general-purpose function-word list and should not be
+reused as one.
+
+**Inherited set** — the 59 entries already in `FUNCTION_WORDS` on `main`, retained
+unchanged for continuity with Experiment 01:
 
 ```
 a an and are as at be been but by for from had has have he her hers him his i if in
@@ -193,7 +227,18 @@ into is it its me my not of on or our ours she so that the their theirs them the
 this to us was we were what when where which who why will with you your
 ```
 
-**Extensions** — closed classes required for skeleton induction:
+**Extensions — project-defined, and NOT YET FROZEN.**
+
+These terms were authored during the drafting of this specification. They derive from no
+external lexicon, no published word list and no upstream standard, and they carry no
+authority beyond this project's own judgement. **They must be reviewed and explicitly
+frozen before implementation** (§11 step 1); until then this block is a proposal, not a
+frozen decision.
+
+Anchors are **not tuned to Experiment 01 findings**. Notably `such` is absent, so
+Experiment 01's most prevalent lexical pattern `such as` skeletonises to `<X> as`. That is
+left standing deliberately: selecting anchors to make a prior result representable would
+make the anchor set a function of the answer it is used to compute.
 
 ```
 modals/auxiliaries : do does did can could shall should would may might must
@@ -205,7 +250,14 @@ subordinators      : because although while since than though unless whether
 correlatives       : either neither nor both only also yet rather instead
 ```
 
-`whether`, `if`, `when` and `where` appear in the base set and are not duplicated.
+`if`, `when` and `where` appear in the inherited set and are not duplicated. `whether`
+does **not** appear in the inherited set; it is an extension term.
+
+The twelve negative contractions listed above are **redundant under rule 4**, which
+canonicalises them to `is not`, `do not` and so on before the anchor lookup runs — both
+resulting tokens are already inherited anchors. They are retained as a safety net for any
+surface form the canonicaliser fails to match, and are flagged for the pre-implementation
+review.
 
 ## 4. Prompt-echo control
 
@@ -302,8 +354,10 @@ A pattern exhibits cross-model replicated convergence when it qualifies in **≥
 domains**, evaluated **independently in discovery and in validation**, each phase using
 its own models and its own disjoint sources.
 
-The full lift matrix — 5 domains × 3 models × 2 phases = 30 cells — is reported for every
-candidate, so concentration is visible rather than averaged away.
+The full lift matrix — 5 domains × 3 models per phase × 2 phases = 30 cells, equivalently
+5 domains × all 6 models = 30 — is reported for every candidate, so concentration is
+visible rather than averaged away. The two forms agree because each model belongs to
+exactly one phase; no model is evaluated twice.
 
 ### 6.4 HC3
 
@@ -419,8 +473,10 @@ regex sentence segmentation, which now carries more weight because *P* depends o
 
 Steps run in this order. Later steps do not inform earlier ones.
 
-1. **Freeze artifacts.** Commit `compost/lexicon/function_words_v1.txt`; record its
-   SHA-256. Commit synthetic fixtures with expected skeletons and counts.
+1. **Freeze artifacts.** Review the project-defined extension terms (§3.4) and freeze them
+   explicitly; they are a proposal until this step completes. Commit
+   `compost/lexicon/structural_anchors_v1.txt`; record its SHA-256. Commit synthetic
+   fixtures with expected skeletons and counts.
 2. **Verify integrity.** Confirm `train.csv` full SHA-256 against upstream. Confirm §9
    coverage figures still hold.
 3. **Validate inducer.** Run against synthetic fixtures. Must recover the four `main`
