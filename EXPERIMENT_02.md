@@ -170,6 +170,18 @@ the judgement being measured.
    `not <X> but <Y>` match regardless of the length of the intervening phrase.
 8. Punctuation: retain `. ! ? , ; :` as tokens; discard all others.
 
+**Adjacent-pair skeletonisation — implementation clarification.**
+
+A sentence pair is skeletonised **per sentence and then concatenated**, with the sentence
+boundary preserved as a token index. Slot collapse (rule 7) never crosses that boundary.
+
+Skeletonising the joined string instead would let a slot at the end of the first sentence
+collapse with a slot at the start of the second, making "spans the sentence boundary"
+undefinable — and the boundary is what distinguishes a cross-sentence occurrence from a
+within-sentence one, which in turn determines which denominator applies (§5). The cost is
+that a slot pair straddling the boundary never collapses. This is a pre-results
+clarification of intent, not a change of method.
+
 **Qualification constraints for an induced skeleton:**
 
 - ≥2 function-word anchors
@@ -415,12 +427,33 @@ occurrences are independent across documents, which is false in three compoundin
 generations from one source share a prompt and content, generations from one model share
 a generator, documents in one domain share genre.
 
+**Calibration set — implementation clarification.**
+
+Nuisance and clustering parameters are estimated from a **dedicated calibration set**,
+reconstructed from the source IDs already used in Experiment 01. Those sources are pulled
+from RAID into complete matched clusters — 1 human plus all 6 selected models, under
+`attack=none`, `decoding=greedy`, `repetition_penalty=no`.
+
+**Those source IDs are permanently excluded from Experiment 02 discovery and validation.**
+The exclusion list is committed as `compost/calibration_sources_v1.txt` and read by the
+corpus builder as a hard filter, so the exclusion is enforced mechanically rather than by
+convention. A source that calibrated the experiment can never also be evidence in it.
+
+**The calibration set may estimate nuisance parameters and runtime cost only.** It may
+**not** be used to alter thresholds, the anchor set, candidate nomination rules or
+replication criteria — all of which are frozen (§3.4, §6). Nothing observed in calibration
+can change what would qualify as a finding; it can only change how many documents are
+needed to detect one, and whether the pipeline is computationally feasible.
+
+Where a parameter cannot be estimated credibly from this set, it is carried as a
+**sensitivity range** rather than a point estimate, and the selected N is reported across
+that range.
+
 **Procedure.** Estimate per-document count and exposure distributions, and
-intra-source / intra-model / intra-domain correlation, from Experiment 01's committed
-per-document data. Simulate corpora across a grid of N, injecting known lifts of 1.3, 1.5
-and 2.0 across a prevalence grid. Run the complete nomination and replication pipeline on
-each simulated corpus. Power is the proportion of injected patterns reaching the §6.3
-verdict.
+intra-source / intra-model correlation, from the calibration set. Simulate corpora across
+a grid of N, injecting known lifts of 1.3, 1.5 and 2.0 across a prevalence grid. Run the
+complete nomination and replication pipeline on each simulated corpus. Power is the
+proportion of injected patterns reaching the §6.3 verdict.
 
 **Bound: N ≤ 851 sources per domain per split** (§9).
 

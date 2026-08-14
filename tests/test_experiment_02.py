@@ -272,3 +272,65 @@ def test_structural_echo_partition_uses_skeleton_membership():
     echo = build_echo_sets("It is not a bug but a feature.", "", ANCHORS)
     counts = partition_structural("not a <X> but a <X>", 2, echo)
     assert counts.echoing == 2 and counts.primary == 0
+
+
+# --- power-gate boundary behaviour ----------------------------------------
+# Regression cover for a specification defect found in Phase 1: the §8 gate asks
+# for >=80% power at lift 1.5 while §6 qualifies cells at lift >= 1.5. A true
+# effect sitting exactly on the decision boundary passes ~50% of the time per
+# cell however large N grows, so the gate is unreachable by construction rather
+# than by sample size.
+
+import importlib.util as _ilu
+import sys as _sys
+from pathlib import Path as _Path
+
+_spec = _ilu.spec_from_file_location(
+    "sim_for_tests", _Path(__file__).resolve().parent.parent / "scripts" / "simulate_power.py"
+)
+_sim = _ilu.module_from_spec(_spec)
+_sys.modules["sim_for_tests"] = _sim
+_spec.loader.exec_module(_sim)
+
+_PARAMS = _sim.ClusterParams(
+    base_rate_per_unit=0.0132, exposure_per_doc=15.0,
+    source_dispersion=1.476, model_dispersion=0.026,
+    provenance="fixture values approximating the Phase 1 calibration measurement",
+)
+
+
+def test_power_at_the_threshold_does_not_improve_with_n():
+    """Doubling N cannot rescue an effect sitting on the decision boundary."""
+    small = _sim.power_at(_PARAMS, 200, 1.5, 30, 11)
+    large = _sim.power_at(_PARAMS, 851, 1.5, 30, 11)
+    assert small < 0.6 and large < 0.6
+    assert abs(large - small) < 0.35, "boundary power should be flat in N, not rising"
+
+
+def test_power_recovers_when_the_effect_clears_the_threshold():
+    """The pipeline is not simply underpowered: lift 2.0 detects reliably."""
+    assert _sim.power_at(_PARAMS, 200, 2.0, 30, 11) > 0.8
+
+
+def test_stress_scenarios_produce_no_false_qualification():
+    """Document-shape asymmetries alone must not manufacture a verdict."""
+    for scenario in _sim.STRESS_SCENARIOS:
+        rate = _sim.power_at(_PARAMS, 200, 1.0, 30, 11, scenario)
+        assert rate == 0.0, scenario.name
+
+
+def test_cluster_params_reject_blank_provenance():
+    bad = _sim.ClusterParams(0.01, 15.0, 1.0, 0.1, "   ")
+    try:
+        bad.validate()
+    except ValueError:
+        return
+    raise AssertionError("blank provenance must be rejected")
+
+
+def test_n_above_the_verified_ceiling_is_refused():
+    try:
+        _sim.power_at(_PARAMS, _sim.MAX_N + 1, 1.5, 2, 1)
+    except ValueError:
+        return
+    raise AssertionError(f"N above {_sim.MAX_N} must be refused")

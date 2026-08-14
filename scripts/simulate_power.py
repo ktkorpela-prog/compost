@@ -183,17 +183,126 @@ def select_n(curve, lift=TARGET_LIFT, target=POWER_TARGET) -> int | None:
     return None
 
 
-def estimate_cluster_params(corpus_dirs, anchors_path=None, exposure="within_sentence"):
-    """Measure clustering from a real corpus rather than assuming it.
+CALIBRATION_COUNTS = ROOT / "corpora" / "_calibration" / "counts.json"
+HUMAN_PREVALENCE_FLOOR = 0.10  # matches the §6 scope decision
+MIN_SKELETONS_FOR_ESTIMATE = 5
 
-    Deliberately not called by default. Phase 2 must invoke it against the
-    Experiment 02 corpus, or supply parameters explicitly with provenance.
+
+def _moment_dispersion(counts: list[int]) -> float | None:
+    """Method-of-moments overdispersion for Poisson counts: (Var - mean) / mean^2.
+
+    Returns None when the sample cannot support an estimate, and clips at 0 —
+    under-dispersion relative to Poisson is not representable by a multiplicative
+    random effect with positive variance.
     """
-    raise NotImplementedError(
-        "estimate_cluster_params is Phase 2 work: it requires the Experiment 02 "
-        "corpus, which does not exist yet. Supply ClusterParams explicitly with "
-        "stated provenance until then."
+    if len(counts) < 3:
+        return None
+    mean = sum(counts) / len(counts)
+    if mean <= 0:
+        return None
+    var = sum((c - mean) ** 2 for c in counts) / (len(counts) - 1)
+    return max(0.0, (var - mean) / (mean ** 2))
+
+
+def _quantile(values: list[float], q: float) -> float:
+    if not values:
+        return 0.0
+    ordered = sorted(values)
+    idx = min(int(q * (len(ordered) - 1) + 0.5), len(ordered) - 1)
+    return ordered[idx]
+
+
+def estimate_cluster_params(counts_path: Path | str = CALIBRATION_COUNTS,
+                            exposure_field: str = "S"):
+    """Measure clustering from the calibration set rather than assuming it.
+
+    Returns ``(ClusterParams, sensitivity)`` where ``sensitivity`` carries
+    interquartile ranges for parameters that a set this size cannot pin down. Per
+    EXPERIMENT_02.md §8, anything not credibly estimable is carried as a range
+    rather than invented as a point estimate.
+
+    The calibration set may inform nuisance parameters and runtime only. It can
+    never alter thresholds, anchors, nomination rules or replication criteria.
+    """
+    path = Path(counts_path)
+    if not path.exists():
+        raise FileNotFoundError(
+            f"{path} missing. Run scripts/build_calibration.py then "
+            f"scripts/benchmark_induction.py before estimating parameters."
+        )
+    rows = json.loads(path.read_text(encoding="utf-8"))
+    human = [r for r in rows if r["model"] == "human"]
+    ai = [r for r in rows if r["model"] != "human"]
+    if not human or not ai:
+        raise ValueError("calibration counts lack a human arm or an AI arm")
+
+    exposure_per_doc = sum(r[exposure_field] for r in human) / len(human)
+    total_human_exposure = sum(r[exposure_field] for r in human)
+
+    # Skeletons common enough to be in scope for Experiment 02 at all.
+    doc_freq: dict[str, int] = {}
+    for r in human:
+        for text in r["skeletons"]:
+            doc_freq[text] = doc_freq.get(text, 0) + 1
+    qualifying = [t for t, n in doc_freq.items()
+                  if n / len(human) >= HUMAN_PREVALENCE_FLOOR]
+
+    rates, source_phis, model_phis = [], [], []
+    for text in qualifying:
+        human_counts = [r["skeletons"].get(text, 0) for r in human]
+        total = sum(human_counts)
+        if total <= 0:
+            continue
+        rates.append(total / total_human_exposure)
+        phi = _moment_dispersion(human_counts)
+        if phi is not None:
+            source_phis.append(phi)
+
+        by_model: dict[str, list[int]] = {}
+        by_model_exposure: dict[str, int] = {}
+        for r in ai:
+            by_model.setdefault(r["model"], []).append(r["skeletons"].get(text, 0))
+            by_model_exposure[r["model"]] = by_model_exposure.get(r["model"], 0) + r[exposure_field]
+        model_rates = [sum(v) / by_model_exposure[m] for m, v in by_model.items()
+                       if by_model_exposure.get(m)]
+        if len(model_rates) >= 3:
+            mean = sum(model_rates) / len(model_rates)
+            if mean > 0:
+                var = sum((x - mean) ** 2 for x in model_rates) / (len(model_rates) - 1)
+                model_phis.append(var / mean ** 2)
+
+    if len(rates) < MIN_SKELETONS_FOR_ESTIMATE:
+        raise ValueError(
+            f"only {len(rates)} skeletons cleared the {HUMAN_PREVALENCE_FLOOR:.0%} human "
+            f"prevalence floor; too few to estimate parameters credibly"
+        )
+
+    params = ClusterParams(
+        base_rate_per_unit=_quantile(rates, 0.5),
+        exposure_per_doc=exposure_per_doc,
+        source_dispersion=_quantile(source_phis, 0.5) if source_phis else 0.0,
+        model_dispersion=_quantile(model_phis, 0.5) if model_phis else 0.0,
+        provenance=(
+            f"measured from Experiment 02 calibration set: {len(human)} human and "
+            f"{len(ai)} model documents, {len(rates)} skeletons above the "
+            f"{HUMAN_PREVALENCE_FLOOR:.0%} human document-prevalence floor; "
+            f"medians reported, dispersions by method of moments"
+        ),
     )
+    sensitivity = {
+        "base_rate_per_unit": (_quantile(rates, 0.25), _quantile(rates, 0.75)),
+        "source_dispersion": (_quantile(source_phis, 0.25), _quantile(source_phis, 0.75))
+        if source_phis else (0.0, 0.0),
+        "model_dispersion": (_quantile(model_phis, 0.25), _quantile(model_phis, 0.75))
+        if model_phis else (0.0, 0.0),
+        "n_skeletons": len(rates),
+        "n_models_observed": len({r["model"] for r in ai}),
+        "note": (
+            "model_dispersion rests on 6 model arms and is not credibly a point "
+            "estimate; treat the interquartile range as the operative uncertainty."
+        ),
+    }
+    return params, sensitivity
 
 
 def main() -> None:
