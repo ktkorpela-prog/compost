@@ -506,9 +506,56 @@ audited rather than taken on trust.
 
 ### 8.3 The gate as corrected
 
-**Gate:** select the smallest N reaching **≥80% power at true lift 2.0**, evaluated against
-the unchanged ≥1.5 qualification criterion, on a grid fine enough to locate the crossing
-rather than round up to a convenient value.
+**Gate:** N is **the smallest value achieving ≥80% power at true lift 2.0 across the
+pre-specified credible nuisance-parameter sensitivity range** — not at the point estimate
+alone. Power is evaluated against the unchanged ≥1.5 qualification criterion, on a grid
+fine enough to locate the crossing rather than round up to a convenient value.
+
+The sensitivity range is the interquartile range measured from the calibration set, and
+comprises three scenarios evaluated together:
+
+| Scenario | `source_dispersion` | `model_dispersion` | `base_rate_per_unit` |
+|---|---|---|---|
+| optimistic | IQR low | IQR low | IQR high |
+| point estimate | median | median | median |
+| pessimistic | IQR high | IQR high | IQR low |
+
+**All three must reach ≥0.80 at the selected N.** Selecting at the point estimate alone
+would treat measured uncertainty as if it were zero: the nuisance parameters were measured
+before any confirmatory analysis, their spread is known, and a design that only holds at
+the median is one that fails roughly half the time the truth sits on the unfavourable side.
+This rule tightens the requirement; it never relaxes it.
+
+**Monte Carlo precision:** at least 2,000 simulations per grid point per scenario, giving
+a standard error near 0.009 at p≈0.80 — sufficient to resolve the crossing to about one
+grid step.
+
+**N is frozen at the value this procedure returns.** Unused RAID capacity is not a reason
+to raise it. The ceiling (§9) bounds what is possible, not what is warranted, and inflating
+N beyond the power requirement would buy sensitivity to effects the experiment has not
+declared itself interested in.
+
+### 8.4 Frozen sample size: N = 70
+
+Selection run at 2,000 simulations per point per scenario (SE ≈ 0.0089 at p = 0.80),
+true lift 2.0, against the unchanged ≥1.5 criterion:
+
+| N | optimistic | point | pessimistic | all ≥0.80 |
+|---:|---:|---:|---:|---|
+| 50 | 0.9305 | 0.8200 | 0.6235 | no |
+| 60 | 0.9590 | 0.8745 | 0.7595 | no |
+| 65 | 0.9625 | 0.8930 | 0.7795 | no |
+| **70** | **0.9695** | **0.9040** | **0.8115** | **YES** |
+
+**N = 70 sources per domain per phase**, the smallest value at which all three measured
+scenarios clear 0.80. The pessimistic scenario is binding throughout: at N = 50 the point
+estimate already passes at 0.8200 while the pessimistic corner sits at 0.6235, which is
+exactly the gap §8.3 exists to close.
+
+**Corpus: 70 × 5 domains × 2 phases × 4 documents/source = 2,800 documents.**
+
+That is 8.2% of the 34,040-document ceiling, leaving N = 70 some 781 sources per domain
+per phase below the maximum RAID could supply. Per §8.3 that margin is not spent.
 
 **If ≥80% power at true lift 2.0 is unreachable at N=851, report that and stop.**
 Thresholds are not weakened to manufacture a result. A negative feasibility finding is a
