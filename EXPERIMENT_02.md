@@ -170,6 +170,18 @@ the judgement being measured.
    `not <X> but <Y>` match regardless of the length of the intervening phrase.
 8. Punctuation: retain `. ! ? , ; :` as tokens; discard all others.
 
+**Adjacent-pair skeletonisation — implementation clarification.**
+
+A sentence pair is skeletonised **per sentence and then concatenated**, with the sentence
+boundary preserved as a token index. Slot collapse (rule 7) never crosses that boundary.
+
+Skeletonising the joined string instead would let a slot at the end of the first sentence
+collapse with a slot at the start of the second, making "spans the sentence boundary"
+undefinable — and the boundary is what distinguishes a cross-sentence occurrence from a
+within-sentence one, which in turn determines which denominator applies (§5). The cost is
+that a slot pair straddling the boundary never collapses. This is a pre-results
+clarification of intent, not a change of method.
+
 **Qualification constraints for an induced skeleton:**
 
 - ≥2 function-word anchors
@@ -415,21 +427,139 @@ occurrences are independent across documents, which is false in three compoundin
 generations from one source share a prompt and content, generations from one model share
 a generator, documents in one domain share genre.
 
+**Calibration set — implementation clarification.**
+
+Nuisance and clustering parameters are estimated from a **dedicated calibration set**,
+reconstructed from the source IDs already used in Experiment 01. Those sources are pulled
+from RAID into complete matched clusters — 1 human plus all 6 selected models, under
+`attack=none`, `decoding=greedy`, `repetition_penalty=no`.
+
+**Those source IDs are permanently excluded from Experiment 02 discovery and validation.**
+The exclusion list is committed as `compost/calibration_sources_v1.txt` and read by the
+corpus builder as a hard filter, so the exclusion is enforced mechanically rather than by
+convention. A source that calibrated the experiment can never also be evidence in it.
+
+**The calibration set may estimate nuisance parameters and runtime cost only.** It may
+**not** be used to alter thresholds, the anchor set, candidate nomination rules or
+replication criteria — all of which are frozen (§3.4, §6). Nothing observed in calibration
+can change what would qualify as a finding; it can only change how many documents are
+needed to detect one, and whether the pipeline is computationally feasible.
+
+Where a parameter cannot be estimated credibly from this set, it is carried as a
+**sensitivity range** rather than a point estimate, and the selected N is reported across
+that range.
+
 **Procedure.** Estimate per-document count and exposure distributions, and
-intra-source / intra-model / intra-domain correlation, from Experiment 01's committed
-per-document data. Simulate corpora across a grid of N, injecting known lifts of 1.3, 1.5
-and 2.0 across a prevalence grid. Run the complete nomination and replication pipeline on
-each simulated corpus. Power is the proportion of injected patterns reaching the §6.3
-verdict.
+intra-source / intra-model correlation, from the calibration set. Simulate corpora across
+a grid of N, injecting known lifts of 1.3, 1.5 and 2.0 across a prevalence grid. Run the
+complete nomination and replication pipeline on each simulated corpus. Power is the
+proportion of injected patterns reaching the §6.3 verdict.
 
 **Bound: N ≤ 851 sources per domain per split** (§9).
 
-**Gate:** select the smallest N reaching **≥80% power at lift 1.5** within the target
-prevalence band.
+### 8.1 The original gate, and why it failed
 
-**If ≥80% power at lift 1.5 is unreachable at N=851, report that and stop.** Thresholds
-are not weakened to manufacture a result. A negative feasibility finding is a valid
-outcome and is published as one.
+The gate as originally specified was: *select the smallest N reaching ≥80% power at
+**true lift 1.5**.* **That gate failed, and it is recorded here rather than erased.**
+
+Phase 1 simulation, using clustering parameters measured from the calibration set:
+
+| true lift | N=200 | N=400 | N=851 |
+|---:|---:|---:|---:|
+| **1.5** | **0.21** | **0.23** | **0.24** |
+| 2.0 | 0.99 | 1.00 | 1.00 |
+| 3.0 | 1.00 | 1.00 | 1.00 |
+
+Single-phase qualification at N=851, true lift 1.5: **0.490**.
+
+**Diagnosis: the failure is caused by the true effect sitting exactly on the decision
+boundary, not by inadequate RAID size.** §6.1 qualifies a cell when the *estimated* lift
+is ≥1.5. If the *true* lift is also 1.5, the estimate exceeds the criterion about half the
+time however large N grows — the measured 0.490 is that coin flip. Compounded across ≥2 of
+3 models, ≥3 of 5 domains and 2 phases, it yields ~21%. Power is **flat in N** because N
+was never the binding constraint, and sensitivity across the full interquartile range of
+both dispersions does not change it.
+
+No sample size, and no dataset, can deliver 80% classification power for an effect exactly
+at its own decision threshold. The defect is logical, not empirical.
+
+### 8.2 Correction: qualification criterion and minimum effect of interest are separated
+
+**The qualification criterion is unchanged: cell lift ≥1.5** (§6.1). No nomination or
+replication threshold is altered by this correction.
+
+**The minimum effect of interest for power evaluation is defined separately as
+true lift = 2.0.** Rationale:
+
+- 1.5 remains the minimum qualification threshold — what it takes for a cell to count;
+- 2.0 is a substantively interpretable effect, a doubling of prevalence relative to
+  matched human controls;
+- power is now evaluated at an effect meaningfully beyond the decision boundary, which is
+  what a power analysis is for.
+
+**Disclosure.** This correction was made **after** the Phase 1 power simulation exposed the
+logical defect, and **before** any confirmatory Experiment 02 extraction or result. No
+Experiment 02 corpus existed when it was made, and nothing observed in any corpus informed
+it: the defect is that powering at the decision boundary is unreachable for any effect
+size in any dataset. The failed gate above is retained in full so the correction can be
+audited rather than taken on trust.
+
+### 8.3 The gate as corrected
+
+**Gate:** N is **the smallest value achieving ≥80% power at true lift 2.0 across the
+pre-specified credible nuisance-parameter sensitivity range** — not at the point estimate
+alone. Power is evaluated against the unchanged ≥1.5 qualification criterion, on a grid
+fine enough to locate the crossing rather than round up to a convenient value.
+
+The sensitivity range is the interquartile range measured from the calibration set, and
+comprises three scenarios evaluated together:
+
+| Scenario | `source_dispersion` | `model_dispersion` | `base_rate_per_unit` |
+|---|---|---|---|
+| optimistic | IQR low | IQR low | IQR high |
+| point estimate | median | median | median |
+| pessimistic | IQR high | IQR high | IQR low |
+
+**All three must reach ≥0.80 at the selected N.** Selecting at the point estimate alone
+would treat measured uncertainty as if it were zero: the nuisance parameters were measured
+before any confirmatory analysis, their spread is known, and a design that only holds at
+the median is one that fails roughly half the time the truth sits on the unfavourable side.
+This rule tightens the requirement; it never relaxes it.
+
+**Monte Carlo precision:** at least 2,000 simulations per grid point per scenario, giving
+a standard error near 0.009 at p≈0.80 — sufficient to resolve the crossing to about one
+grid step.
+
+**N is frozen at the value this procedure returns.** Unused RAID capacity is not a reason
+to raise it. The ceiling (§9) bounds what is possible, not what is warranted, and inflating
+N beyond the power requirement would buy sensitivity to effects the experiment has not
+declared itself interested in.
+
+### 8.4 Frozen sample size: N = 70
+
+Selection run at 2,000 simulations per point per scenario (SE ≈ 0.0089 at p = 0.80),
+true lift 2.0, against the unchanged ≥1.5 criterion:
+
+| N | optimistic | point | pessimistic | all ≥0.80 |
+|---:|---:|---:|---:|---|
+| 50 | 0.9305 | 0.8200 | 0.6235 | no |
+| 60 | 0.9590 | 0.8745 | 0.7595 | no |
+| 65 | 0.9625 | 0.8930 | 0.7795 | no |
+| **70** | **0.9695** | **0.9040** | **0.8115** | **YES** |
+
+**N = 70 sources per domain per phase**, the smallest value at which all three measured
+scenarios clear 0.80. The pessimistic scenario is binding throughout: at N = 50 the point
+estimate already passes at 0.8200 while the pessimistic corner sits at 0.6235, which is
+exactly the gap §8.3 exists to close.
+
+**Corpus: 70 × 5 domains × 2 phases × 4 documents/source = 2,800 documents.**
+
+That is 8.2% of the 34,040-document ceiling, leaving N = 70 some 781 sources per domain
+per phase below the maximum RAID could supply. Per §8.3 that margin is not spent.
+
+**If ≥80% power at true lift 2.0 is unreachable at N=851, report that and stop.**
+Thresholds are not weakened to manufacture a result. A negative feasibility finding is a
+valid outcome and is published as one.
 
 **Feasibility pilot.** Runs on HC3 only — already barred from nomination and replication.
 It confirms the pipeline runs end to end, the inducer emits sane skeletons, echo detection
@@ -464,7 +594,9 @@ only the AI arm. Above N=851, RAID is exhausted for this design at any configura
 The experiment **stops and reports** — it does not adapt — when any of the following
 occurs:
 
-1. **Power gate fails.** ≥80% power at lift 1.5 is unreachable at N=851 (§8).
+1. **Power gate fails.** ≥80% power at the minimum effect of interest, true lift 2.0, is
+   unreachable at N=851 (§8.3). The original lift-1.5 formulation of this condition failed
+   for a logical reason and was corrected; see §8.1–8.2.
 2. **Inducer fails its oracle.** Synthetic fixtures do not recover the known frames (§3.3).
 3. **Lexicon hash mismatch.** The lexicon SHA-256 in an artifact does not match the
    committed lexicon (§3.4).
