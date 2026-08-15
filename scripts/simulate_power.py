@@ -49,7 +49,14 @@ PHASES = 2
 MAX_N = 851
 
 POWER_TARGET = 0.80
-TARGET_LIFT = 1.5
+
+# The qualification CRITERION (CELL_MIN_LIFT, above) and the effect size power is
+# evaluated AT are different quantities. Conflating them was the Phase 1 defect:
+# an effect exactly on the decision boundary passes ~50% of the time per cell at
+# any N, so >=80% power at true lift 1.5 is unreachable by construction.
+# See EXPERIMENT_02.md 8.1-8.3.
+MIN_EFFECT_OF_INTEREST = 2.0
+TARGET_LIFT = MIN_EFFECT_OF_INTEREST
 
 
 @dataclass

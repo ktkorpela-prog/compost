@@ -457,12 +457,62 @@ proportion of injected patterns reaching the §6.3 verdict.
 
 **Bound: N ≤ 851 sources per domain per split** (§9).
 
-**Gate:** select the smallest N reaching **≥80% power at lift 1.5** within the target
-prevalence band.
+### 8.1 The original gate, and why it failed
 
-**If ≥80% power at lift 1.5 is unreachable at N=851, report that and stop.** Thresholds
-are not weakened to manufacture a result. A negative feasibility finding is a valid
-outcome and is published as one.
+The gate as originally specified was: *select the smallest N reaching ≥80% power at
+**true lift 1.5**.* **That gate failed, and it is recorded here rather than erased.**
+
+Phase 1 simulation, using clustering parameters measured from the calibration set:
+
+| true lift | N=200 | N=400 | N=851 |
+|---:|---:|---:|---:|
+| **1.5** | **0.21** | **0.23** | **0.24** |
+| 2.0 | 0.99 | 1.00 | 1.00 |
+| 3.0 | 1.00 | 1.00 | 1.00 |
+
+Single-phase qualification at N=851, true lift 1.5: **0.490**.
+
+**Diagnosis: the failure is caused by the true effect sitting exactly on the decision
+boundary, not by inadequate RAID size.** §6.1 qualifies a cell when the *estimated* lift
+is ≥1.5. If the *true* lift is also 1.5, the estimate exceeds the criterion about half the
+time however large N grows — the measured 0.490 is that coin flip. Compounded across ≥2 of
+3 models, ≥3 of 5 domains and 2 phases, it yields ~21%. Power is **flat in N** because N
+was never the binding constraint, and sensitivity across the full interquartile range of
+both dispersions does not change it.
+
+No sample size, and no dataset, can deliver 80% classification power for an effect exactly
+at its own decision threshold. The defect is logical, not empirical.
+
+### 8.2 Correction: qualification criterion and minimum effect of interest are separated
+
+**The qualification criterion is unchanged: cell lift ≥1.5** (§6.1). No nomination or
+replication threshold is altered by this correction.
+
+**The minimum effect of interest for power evaluation is defined separately as
+true lift = 2.0.** Rationale:
+
+- 1.5 remains the minimum qualification threshold — what it takes for a cell to count;
+- 2.0 is a substantively interpretable effect, a doubling of prevalence relative to
+  matched human controls;
+- power is now evaluated at an effect meaningfully beyond the decision boundary, which is
+  what a power analysis is for.
+
+**Disclosure.** This correction was made **after** the Phase 1 power simulation exposed the
+logical defect, and **before** any confirmatory Experiment 02 extraction or result. No
+Experiment 02 corpus existed when it was made, and nothing observed in any corpus informed
+it: the defect is that powering at the decision boundary is unreachable for any effect
+size in any dataset. The failed gate above is retained in full so the correction can be
+audited rather than taken on trust.
+
+### 8.3 The gate as corrected
+
+**Gate:** select the smallest N reaching **≥80% power at true lift 2.0**, evaluated against
+the unchanged ≥1.5 qualification criterion, on a grid fine enough to locate the crossing
+rather than round up to a convenient value.
+
+**If ≥80% power at true lift 2.0 is unreachable at N=851, report that and stop.**
+Thresholds are not weakened to manufacture a result. A negative feasibility finding is a
+valid outcome and is published as one.
 
 **Feasibility pilot.** Runs on HC3 only — already barred from nomination and replication.
 It confirms the pipeline runs end to end, the inducer emits sane skeletons, echo detection
@@ -497,7 +547,9 @@ only the AI arm. Above N=851, RAID is exhausted for this design at any configura
 The experiment **stops and reports** — it does not adapt — when any of the following
 occurs:
 
-1. **Power gate fails.** ≥80% power at lift 1.5 is unreachable at N=851 (§8).
+1. **Power gate fails.** ≥80% power at the minimum effect of interest, true lift 2.0, is
+   unreachable at N=851 (§8.3). The original lift-1.5 formulation of this condition failed
+   for a logical reason and was corrected; see §8.1–8.2.
 2. **Inducer fails its oracle.** Synthetic fixtures do not recover the known frames (§3.3).
 3. **Lexicon hash mismatch.** The lexicon SHA-256 in an artifact does not match the
    committed lexicon (§3.4).

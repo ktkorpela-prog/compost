@@ -26,7 +26,10 @@ sim = importlib.util.module_from_spec(spec)
 sys.modules["sim"] = sim
 spec.loader.exec_module(sim)
 
-GRID = [100, 200, 400, 600, 851]
+# Fine grid to locate the crossing rather than round up to a convenient value.
+# Floor at 25: below that a cell cannot reach the frozen >=10-occurrence
+# requirement at the measured base rate, so smaller N is not evaluable.
+GRID = [25, 40, 50, 60, 75, 90, 100, 125, 150, 200, 400, 851]
 
 
 def main() -> None:
@@ -43,7 +46,9 @@ def main() -> None:
           f"source_phi={params.source_dispersion:.3f} "
           f"model_phi={params.model_dispersion:.3f}\n")
 
-    print(f"=== POWER CURVE, lift {sim.TARGET_LIFT}, {args.replicates} replicates ===")
+    print(f"=== POWER CURVE at minimum effect of interest, true lift "
+          f"{sim.MIN_EFFECT_OF_INTEREST} (criterion stays lift >= {sim.CELL_MIN_LIFT}), "
+          f"{args.replicates} replicates ===")
     curve = sim.power_curve(params, GRID, [sim.TARGET_LIFT], args.replicates, args.seed)
     for n in GRID:
         print(f"  N={n:<5} power={curve[sim.TARGET_LIFT][n]:.3f}")
