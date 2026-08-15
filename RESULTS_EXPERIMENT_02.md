@@ -221,9 +221,9 @@ official result is the clean rerun reported in Part I.
 > However, the structural representation produced **exclusively** generic syntactic
 > scaffolding — not merely predominantly — with zero of 31 replicated patterns containing
 > any negation, contrast or reframe marker, and the sole lexical candidate failing
-> validation. Experiment 02 therefore validates the reproducibility of the operational
-> signal and the correctness of the pipeline, but **does not validate the current
-> structural representation as a measure of rhetorical convergence.**
+> validation. Experiment 02 therefore **demonstrates reproducibility under the frozen
+> operational criteria**, and the correctness of the pipeline, but **does not validate the
+> current structural representation as a measure of rhetorical convergence.**
 
 The wording departs from the draft in one respect, and deliberately: the draft anticipated
 a set *dominated by* scaffolding. Systematic inspection found it to be entirely so. The
