@@ -535,6 +535,50 @@ to raise it. The ceiling (§9) bounds what is possible, not what is warranted, a
 N beyond the power requirement would buy sensitivity to effects the experiment has not
 declared itself interested in.
 
+### 8.5 Stopped run of 2026-08-15, and the integrity-mechanism repair
+
+**A confirmatory run was executed and stopped. It is recorded here rather than erased.**
+
+Stop condition §10.3 — lexicon hash mismatch — fired. The recorded anchor hash was
+`1b74a52365ebbbb1d97733efc504f279982e394a814036e52415e78c73c9187e` against the committed
+`2b712d70b3c0051b29fd9c5b3b760199c6f0ad216733a409489ab65874d3688b`.
+
+**Cause: raw-byte SHA-256 is platform-dependent under `core.autocrlf=true`.** The working
+copy held 117 CRLF line endings (732 bytes); the committed blob held LF (615 bytes).
+
+**The 117 parsed anchors were identical to the committed anchor set** — verified by parsing
+both representations and comparing the resulting sets, which matched exactly.
+
+**This was an integrity-mechanism defect, not an anchor-content mismatch.** The run used
+the correct anchors throughout. What failed was the mechanism for *proving* it had.
+
+The correction occurs **after the stopped run and before any confirmatory result is
+accepted**. No substantive parameter is altered by it: anchors, thresholds, N, corpus
+selection, candidate rules and replication criteria are untouched.
+
+#### Provisional numbers from the stopped run — NOT final
+
+The stopped run provisionally produced **72 discovery candidates** and **31 validation
+replications**. These are recorded for the methodological trail only. They were invalidated
+by stop condition 3 before confirmatory acceptance and **must not be cited as results**.
+
+#### Canonical-content hashing
+
+Integrity is now guaranteed by hashing canonical content rather than raw bytes
+(`compost/integrity.py`):
+
+**Plain-text and list artifacts** — decode UTF-8; normalise CRLF and CR to LF; strip
+trailing newlines and append exactly one on non-empty content; hash the canonical UTF-8
+bytes.
+
+**JSON artifacts** — hash a deterministic canonical serialisation with sorted keys and
+fixed separators, so reformatting, indentation and platform newlines cannot move the hash.
+
+`.gitattributes` pins the repository's text formats to LF as hygiene. **The hygiene is not
+the guarantee** — a contributor's checkout settings can be wrong, and canonical hashing
+holds regardless. Regression tests assert that LF, CRLF and CR representations of the
+anchor file hash identically, and that a raw-byte hash *would* have differed.
+
 ### 8.4 Frozen sample size: N = 70
 
 Selection run at 2,000 simulations per point per scenario (SE ≈ 0.0089 at p = 0.80),

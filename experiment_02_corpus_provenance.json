@@ -1,0 +1,35 @@
+{
+  "calibration_overlap": 0,
+  "calibration_sources_excluded": 575,
+  "corpus_content_digest": "8bc244b558298fb4c5a69600c246f58d910a53df2127ca597efc04b30b440030",
+  "discovery_models": [
+    "chatgpt",
+    "mistral-chat",
+    "mpt-chat"
+  ],
+  "discovery_validation_overlap": 0,
+  "documents": 2800,
+  "domains": [
+    "abstracts",
+    "books",
+    "news",
+    "recipes",
+    "wiki"
+  ],
+  "filters": {
+    "attack": "none",
+    "decoding": "greedy",
+    "min_chars": 400,
+    "repetition_penalty": "no",
+    "required_model_coverage": "all six (EXPERIMENT_02.md 2.4)"
+  },
+  "metadata_sha256": "a57707e0531a1da9f2c458139af5437e06e4cc1a0b7727f2aa45880039b10f31",
+  "provenance_canonical_sha256": "8be1265d04ce118c41367d4dbe6b00f87d3f6236aa8723f09c698aeda2d6d187",
+  "raid_train_sha256": "52f04ceebc126064e68fbd22d8b736964065745464f4bfd52e488150b49f84e4",
+  "sources_per_domain_per_phase": 70,
+  "validation_models": [
+    "gpt4",
+    "llama-chat",
+    "cohere-chat"
+  ]
+}

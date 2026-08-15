@@ -10,10 +10,11 @@ forms; see :func:`assert_lexical_unaffected` in the tests.
 
 from __future__ import annotations
 
-import hashlib
 import re
 import unicodedata
 from pathlib import Path
+
+from .integrity import canonical_text_file_sha256
 
 SLOT = "<X>"
 NUM_SLOT = "<NUM>"
@@ -55,8 +56,13 @@ def load_anchors(path: Path | str = LEXICON_PATH) -> frozenset[str]:
 
 
 def anchors_sha256(path: Path | str = LEXICON_PATH) -> str:
-    """Full-file SHA-256 of the anchor set, for recording in result artifacts."""
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    """Canonical-content SHA-256 of the anchor set, for recording in artifacts.
+
+    Canonical rather than raw-byte: a raw-byte hash is platform-dependent under
+    ``core.autocrlf`` and fired Experiment 02 stop condition 3 on a line-ending
+    difference with identical anchor content. See :mod:`compost.integrity`.
+    """
+    return canonical_text_file_sha256(Path(path))
 
 
 def structural_tokens(text: str) -> list[str]:

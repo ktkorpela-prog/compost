@@ -1,0 +1,1480 @@
+{
+  "anchor_sha256": "2b712d70b3c0051b29fd9c5b3b760199c6f0ad216733a409489ab65874d3688b",
+  "by_kind": {
+    "cross_sentence": 9,
+    "ngram": 1,
+    "within_sentence": 62
+  },
+  "candidate_count": 72,
+  "candidates": [
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/mistral-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "cross_sentence",
+      "pattern": ". the <X> is"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "cross_sentence",
+      "pattern": "<X> . the <X> is"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "cross_sentence",
+      "pattern": "<X> . the <X> is <X>"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/mistral-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "cross_sentence",
+      "pattern": "<X> and <X> . the"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/mistral-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "cross_sentence",
+      "pattern": "<X> and <X> . the <X>"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/mistral-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "cross_sentence",
+      "pattern": "and <X> . the"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/mistral-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "cross_sentence",
+      "pattern": "and <X> . the <X>"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mpt-chat"
+      ],
+      "kind": "cross_sentence",
+      "pattern": "the <X> . the"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mpt-chat"
+      ],
+      "kind": "cross_sentence",
+      "pattern": "the <X> . the <X>"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mpt-chat"
+      ],
+      "kind": "ngram",
+      "pattern": "such as"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/mpt-chat",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "<X> a <X> of"
+    },
+    {
+      "discovery_domains": [
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/mistral-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "<X> a <X> of <X>"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "<X> and <X> of"
+    },
+    {
+      "discovery_domains": [
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/mistral-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "<X> and <X> that"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "<X> and <X> to"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "<X> and <X> to <X>"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/mistral-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "<X> for <X> and"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "<X> in <X> and <X>"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "<X> is a"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "<X> is a <X>"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "<X> of <X> and"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "<X> of <X> and <X>"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "<X> of <X> and <X> ."
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "<X> the <X> and"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "<X> the <X> and <X>"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "<X> the <X> of <X>"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "<X> the <X> of <X> and"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "<X> to <X> and"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "<X> to <X> and <X>"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "<X> to <X> the"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "<X> to <X> the <X>"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "<X> to <X> the <X> of"
+    },
+    {
+      "discovery_domains": [
+        "news",
+        "recipes",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "recipes/chatgpt",
+        "recipes/mistral-chat",
+        "recipes/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "<X> to the <X> ,"
+    },
+    {
+      "discovery_domains": [
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "books/chatgpt",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "a <X> and"
+    },
+    {
+      "discovery_domains": [
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "a <X> and <X>"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "a <X> of <X>"
+    },
+    {
+      "discovery_domains": [
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "a <X> of <X> ,"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "a <X> of <X> and"
+    },
+    {
+      "discovery_domains": [
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/mistral-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "a <X> of <X> and <X>"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "a <X> that"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "a <X> that <X>"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "a <X> to"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "and <X> of"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "and <X> of <X>"
+    },
+    {
+      "discovery_domains": [
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/mistral-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "and <X> that"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "wiki/chatgpt",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "and <X> the"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "wiki/chatgpt",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "and <X> the <X>"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mpt-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "and <X> to"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mpt-chat",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "and <X> to <X>"
+    },
+    {
+      "discovery_domains": [
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/mistral-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "and the <X>"
+    },
+    {
+      "discovery_domains": [
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "and the <X> of <X>"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/mistral-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "for <X> and"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "of <X> and"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "of <X> and <X>"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "of <X> and <X> ."
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "the <X> and"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "the <X> and <X>"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "news/chatgpt",
+        "wiki/chatgpt",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "the <X> and <X> of"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "the <X> of <X>"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "the <X> of <X> and"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "the <X> of <X> and <X>"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "the <X> of the <X> ."
+    },
+    {
+      "discovery_domains": [
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "their <X> and"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "to <X> and"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "to <X> and <X>"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/mistral-chat",
+        "news/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "to <X> the"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/mistral-chat",
+        "news/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "to <X> the <X>"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "abstracts/mpt-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "books/mpt-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "to <X> the <X> of"
+    },
+    {
+      "discovery_domains": [
+        "abstracts",
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "abstracts/chatgpt",
+        "abstracts/mistral-chat",
+        "books/chatgpt",
+        "books/mistral-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "to <X> the <X> of <X>"
+    },
+    {
+      "discovery_domains": [
+        "news",
+        "recipes",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "recipes/chatgpt",
+        "recipes/mistral-chat",
+        "recipes/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "to the <X> ,"
+    },
+    {
+      "discovery_domains": [
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "books/chatgpt",
+        "books/mistral-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "news/mpt-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "with <X> and"
+    },
+    {
+      "discovery_domains": [
+        "books",
+        "news",
+        "wiki"
+      ],
+      "discovery_models_passing": [
+        "books/chatgpt",
+        "books/mistral-chat",
+        "news/chatgpt",
+        "news/mistral-chat",
+        "wiki/chatgpt",
+        "wiki/mistral-chat",
+        "wiki/mpt-chat"
+      ],
+      "kind": "within_sentence",
+      "pattern": "with <X> and <X>"
+    }
+  ]
+}
