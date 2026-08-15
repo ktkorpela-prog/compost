@@ -1,0 +1,12 @@
+# Repository hygiene: pin text formats to LF so working copies match blobs.
+# This is hygiene only. The integrity guarantee for Experiment 02 artifacts is
+# canonical-content hashing in compost/integrity.py, which holds even when a
+# contributor's checkout settings do not.
+* text=auto eol=lf
+*.py    text eol=lf
+*.md    text eol=lf
+*.txt   text eol=lf
+*.json  text eol=lf
+*.csv   text eol=lf
+*.toml  text eol=lf
+*.sha256 text eol=lf

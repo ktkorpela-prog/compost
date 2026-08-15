@@ -1,0 +1,154 @@
+{
+  "anchor_sha256": "2b712d70b3c0051b29fd9c5b3b760199c6f0ad216733a409489ab65874d3688b",
+  "bootstrap": {
+    "cells": 930,
+    "interval": "95% percentile",
+    "p_values": null,
+    "resamples": 2000,
+    "unit": "source clusters; models fixed, never resampled"
+  },
+  "calibration_sources_excluded": 575,
+  "candidates_by_kind": {
+    "cross_sentence": 9,
+    "ngram": 1,
+    "within_sentence": 62
+  },
+  "discovery_candidate_artifact_sha256": "c282003498b731aac943e97010cc9a592f25e6d272346134d25a60fb574d3587",
+  "discovery_candidates": 72,
+  "echo": {
+    "discovery_echo_fraction": 0.010098,
+    "discovery_echoing_occurrences": 25586,
+    "discovery_total_occurrences": 2533851,
+    "validation_echo_fraction": 0.010152,
+    "validation_echoing_occurrences": 27680,
+    "validation_total_occurrences": 2726456
+  },
+  "lift_matrix_rows": 2160,
+  "replicated": [
+    {
+      "kind": "cross_sentence",
+      "pattern": ". the <X> is"
+    },
+    {
+      "kind": "cross_sentence",
+      "pattern": "<X> . the <X> is"
+    },
+    {
+      "kind": "cross_sentence",
+      "pattern": "and <X> . the"
+    },
+    {
+      "kind": "cross_sentence",
+      "pattern": "and <X> . the <X>"
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "<X> a <X> of"
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "<X> a <X> of <X>"
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "<X> for <X> and"
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "<X> is a"
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "<X> is a <X>"
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "<X> of <X> and"
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "<X> of <X> and <X>"
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "<X> of <X> and <X> ."
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "<X> the <X> and"
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "<X> the <X> and <X>"
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "<X> the <X> of <X> and"
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "<X> to <X> and <X>"
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "a <X> and"
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "a <X> and <X>"
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "a <X> of <X>"
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "a <X> of <X> ,"
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "a <X> of <X> and"
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "a <X> of <X> and <X>"
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "a <X> that"
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "a <X> that <X>"
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "of <X> and"
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "of <X> and <X>"
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "of <X> and <X> ."
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "the <X> and <X> of"
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "the <X> of <X> and"
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "the <X> of <X> and <X>"
+    },
+    {
+      "kind": "within_sentence",
+      "pattern": "to <X> and <X>"
+    }
+  ],
+  "replicated_patterns": 31
+}

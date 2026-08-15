@@ -334,3 +334,67 @@ def test_n_above_the_verified_ceiling_is_refused():
     except ValueError:
         return
     raise AssertionError(f"N above {_sim.MAX_N} must be refused")
+
+
+# --- canonical-content hashing (platform independence) ---------------------
+# Regression cover for Experiment 02 stop condition 3, which fired on a
+# line-ending difference with identical anchor content. A raw-byte hash of a
+# working-copy text file is platform-dependent under core.autocrlf; canonical
+# hashing is not. See EXPERIMENT_02.md §8.5 and compost/integrity.py.
+
+from compost.integrity import (  # noqa: E402
+    canonical_json_sha256,
+    canonical_text_sha256,
+    canonicalise_text,
+)
+
+
+def test_lf_and_crlf_hash_identically():
+    assert canonical_text_sha256("a\nb\nc\n") == canonical_text_sha256("a\r\nb\r\nc\r\n")
+
+
+def test_classic_mac_cr_hashes_identically():
+    assert canonical_text_sha256("a\nb\nc\n") == canonical_text_sha256("a\rb\rc\r")
+
+
+def test_trailing_newline_handling_is_deterministic():
+    base = canonical_text_sha256("a\nb\n")
+    assert canonical_text_sha256("a\nb") == base
+    assert canonical_text_sha256("a\nb\n\n\n") == base
+    assert canonical_text_sha256("a\r\nb\r\n\r\n") == base
+
+
+def test_empty_and_whitespace_only_are_stable():
+    assert canonical_text_sha256("") == canonical_text_sha256("\n\n")
+    assert canonicalise_text("\r\n\r\n") == b""
+
+
+def test_anchor_file_hash_survives_line_ending_rewrite():
+    """The exact failure that stopped the confirmatory run must not recur."""
+    from compost.canonical import LEXICON_PATH
+    text = LEXICON_PATH.read_text(encoding="utf-8")
+    as_lf = text.replace("\r\n", "\n")
+    as_crlf = as_lf.replace("\n", "\r\n")
+    assert as_lf != as_crlf, "precondition: the two representations differ in bytes"
+    assert canonical_text_sha256(as_lf) == canonical_text_sha256(as_crlf)
+    import hashlib
+    assert (hashlib.sha256(as_lf.encode()).hexdigest()
+            != hashlib.sha256(as_crlf.encode()).hexdigest()), \
+        "precondition: a raw-byte hash WOULD have differed"
+
+
+def test_canonical_json_ignores_formatting():
+    a = {"b": 1, "a": [1, 2, {"z": None, "y": True}]}
+    b = {"a": [1, 2, {"y": True, "z": None}], "b": 1}
+    assert canonical_json_sha256(a) == canonical_json_sha256(b)
+
+
+def test_canonical_json_detects_real_content_change():
+    assert canonical_json_sha256({"a": 1}) != canonical_json_sha256({"a": 2})
+
+
+def test_canonical_anchor_hash_matches_committed_blob_form():
+    """Canonical form equals the LF form git stores, so the two never diverge."""
+    from compost.canonical import LEXICON_PATH, anchors_sha256
+    lf = LEXICON_PATH.read_text(encoding="utf-8").replace("\r\n", "\n")
+    assert anchors_sha256() == canonical_text_sha256(lf)
